@@ -10,7 +10,7 @@ import org.ietf.jgss.*;
 import sun.misc.BASE64Encoder;
 import org.ietf.jgss.Oid;
 
-public class Client {
+public class KerberosClient {
 	private static Oid krb5Oid;
 	 
 	  private Subject subject;
@@ -19,19 +19,20 @@ public class Client {
 	  public static void main( String[] args) {
 	    try {
 	      // Setup up the Kerberos properties.
+	      String path = "${Path}";
 	      Properties props = new Properties();
-	      props.load( new FileInputStream( "client.properties"));
+	      props.load( new FileInputStream( "C:\\Users\\Administrator\\workspace\\KerberosSeurity\\src\\resources\\client.properties"));
 	      System.setProperty( "sun.security.krb5.debug", "true");
 	      System.setProperty( "java.security.krb5.realm", props.getProperty( "realm")); 
 	      System.setProperty( "java.security.krb5.kdc", props.getProperty( "kdc"));
-	      System.setProperty( "java.security.auth.login.config", "jaas.conf");
+	      System.setProperty( "java.security.auth.login.config", "C:\\Users\\Administrator\\workspace\\KerberosSeurity\\src\\resources\\jaas.conf");
 	      System.setProperty( "javax.security.auth.useSubjectCredsOnly", "true");
 	      String username = props.getProperty( "client.principal.name");
 	      String password = props.getProperty( "client.password");
 	      String servicePrincipalName =	props.getProperty("service.principal.name");
 	      // Oid mechanism = use Kerberos V5 as the security mechanism.
 	      krb5Oid = new Oid( "1.2.840.113554.1.2.2");
-	      Client client = new Client();
+	      KerberosClient client = new KerberosClient();
 	      // Login to the KDC.
 	      client.login( username, password);
 	      // Request the service ticket.
@@ -68,9 +69,66 @@ public class Client {
 	    }
 	  }
 	 
-	  public Client() {
+	  public KerberosClient() {
 	    super();
 	  }
+	  public String getKerberosTicket() {
+		  try {
+		      // Setup up the Kerberos properties.
+		      Properties props = new Properties();
+		      String path = "${path}";
+//		      props.load( new FileInputStream( "client.properties"));
+		      props.load( new FileInputStream( "C:\\Users\\Administrator\\workspace\\KerberosSeurity\\src\\resources\\client.properties"));
+		      
+		      System.setProperty( "sun.security.krb5.debug", "true");
+		      System.setProperty( "java.security.krb5.realm", props.getProperty( "realm")); 
+		      System.setProperty( "java.security.krb5.kdc", props.getProperty( "kdc"));
+		      System.setProperty( "java.security.auth.login.config", "C:\\Users\\Administrator\\workspace\\KerberosSeurity\\src\\resources\\jaas.conf");
+		      System.setProperty( "javax.security.auth.useSubjectCredsOnly", "true");
+		      String username = props.getProperty( "client.principal.name");
+		      String password = props.getProperty( "client.password");
+		      String servicePrincipalName =	props.getProperty("service.principal.name");
+		      // Oid mechanism = use Kerberos V5 as the security mechanism.
+		      krb5Oid = new Oid( "1.2.840.113554.1.2.2");
+		      KerberosClient client = new KerberosClient();
+		      // Login to the KDC.
+		      client.login( username, password);
+		      // Request the service ticket.
+		      client.initiateSecurityContext( servicePrincipalName);
+		      // Write the ticket to disk for the server to read.
+		      encodeAndWriteTicketToDisk( client.serviceTicket, "./security.token");
+		      System.out.println( "Service ticket encoded to disk successfully");
+		      
+		      String encodedClientKerberosTicket = encodeAndWriteTicketToDisk( client.serviceTicket, "./security.token");
+		      System.out.println("ticket = " + encodedClientKerberosTicket);
+//		      Socket s = new Socket("localhost",7777);
+//		      PrintWriter out = new PrintWriter(s.getOutputStream());   
+//		      out.println(encodedClientKerberosTicket);
+//		      out.flush();
+//		      out.close();
+//		      System.exit(0);
+		      return encodedClientKerberosTicket;
+		      
+		      
+		    }
+		    catch ( LoginException e) {
+		      e.printStackTrace();
+		      System.err.println( "There was an error during the JAAS login");
+		      System.exit( -1);
+		    }
+		    catch ( GSSException e) {
+		      e.printStackTrace();
+		      System.err.println( "There was an error during the security context initiation");
+		      System.exit( -1);
+		    }
+		    catch ( IOException e) {
+		      e.printStackTrace();
+		      System.err.println( "There was an IO error");
+		      System.exit( -1);
+		    }
+		return null;
+		  }
+		  
 	 
 	  // Authenticate against the KDC using JAAS.
 	  private void login( String username, String password) throws LoginException {
@@ -105,8 +163,7 @@ public class Client {
 	          return null;
 	        }
 	      }
-	    });
-	 
+	    });	 
 	  }
 	 
 	  // Base64 encode the raw ticket and write it to the given file.
