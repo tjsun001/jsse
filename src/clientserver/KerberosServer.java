@@ -92,30 +92,41 @@ public class KerberosServer {
   }
   
   public void validateTicket(String ticket) {
-	  try {
-	      // Setup up the Kerberos properties.
-	      Properties props = new Properties();
-	      props.load( new FileInputStream( "C:\\Users\\Administrator\\workspace\\KerberosSeurity\\src\\resources\\server.properties"));
-	      System.setProperty( "sun.security.krb5.debug", "true");
-	      System.setProperty( "java.security.krb5.realm", props.getProperty( "realm"));
-	      System.setProperty( "java.security.krb5.kdc", props.getProperty( "kdc"));
-	      System.setProperty( "java.security.auth.login.config", "C:\\Users\\Administrator\\workspace\\KerberosSeurity\\src\\resources\\jaas.conf");
-	      System.setProperty( "javax.security.auth.useSubjectCredsOnly", "true");
-	      String password = props.getProperty( "service.password");
-	      // Oid mechanism = use Kerberos V5 as the security mechanism.
-	      krb5Oid = new Oid( "1.2.840.113554.1.2.2");
-	      KerberosServer server = new KerberosServer();
-	      // Login to the KDC.
-	      server.login( password);
+	  try { Properties props = new Properties();
+      props.load( new FileInputStream( "C:\\Users\\Administrator\\workspace\\KerberosSeurity\\server.properties"));
+      System.setProperty( "sun.security.krb5.debug", "true");
+      System.setProperty( "java.security.krb5.realm", props.getProperty( "realm"));
+      System.setProperty( "java.security.krb5.kdc", props.getProperty( "kdc"));
+      System.setProperty( "java.security.auth.login.config", "C:\\Users\\Administrator\\workspace\\KerberosSeurity\\jaas.conf");
+      System.setProperty( "javax.security.auth.useSubjectCredsOnly", "true");
+      String password = props.getProperty( "service.password");
+      // Oid mechanism = use Kerberos V5 as the security mechanism.
+      krb5Oid = new Oid( "1.2.840.113554.1.2.2");
+      KerberosServer server = new KerberosServer();
+      // Login to the KDC.
+      server.login( password);
+//      ServerSocket s = new ServerSocket(7777);
+//      while (true) {
+//        Socket s2 = s.accept();
+//        BufferedReader is = new BufferedReader(new InputStreamReader(s2.getInputStream()));
+//        StringBuffer buffer = new StringBuffer();
+//        String str = null;
+//        while ((str = is.readLine()) != null) {
+//          buffer.append( str + "\n");
+//          System.out.println("ticket = " + str);
+//        }
+//        is.close();
+
+        @SuppressWarnings("restriction")
+		BASE64Decoder decoder = new BASE64Decoder();
+        
+        @SuppressWarnings("restriction")
+//		String clientName = server.acceptSecurityContext(decoder.decodeBuffer( buffer.toString()));
+		String clientName = server.acceptSecurityContext(decoder.decodeBuffer(ticket.toString()));
+        System.out.println( "\nSecurity context successfully initialised!");
+        System.out.println( "\nHello World " + clientName + "!");
+//      }
 	     
-	        @SuppressWarnings("restriction")
-			BASE64Decoder decoder = new BASE64Decoder();
-	        //byte serviceTicket[] = loadTokenFromDisk();
-	        @SuppressWarnings("restriction")
-			String clientName = server.acceptSecurityContext(decoder.decodeBuffer( ticket));
-	        
-	        System.out.println( "\nSecurity context successfully initialised!");
-	        System.out.println( "\nHello World " + clientName + "!");
 	    }
 	    catch (Exception e) {
 	      e.printStackTrace();

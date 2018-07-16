@@ -21,11 +21,11 @@ public class KerberosClient {
 	      // Setup up the Kerberos properties.
 	      String path = "${Path}";
 	      Properties props = new Properties();
-	      props.load( new FileInputStream( "C:\\Users\\Administrator\\workspace\\KerberosSeurity\\src\\resources\\client.properties"));
+	      props.load( new FileInputStream( "C:\\Users\\Administrator\\workspace\\KerberosSeurity\\client.properties"));
 	      System.setProperty( "sun.security.krb5.debug", "true");
 	      System.setProperty( "java.security.krb5.realm", props.getProperty( "realm")); 
 	      System.setProperty( "java.security.krb5.kdc", props.getProperty( "kdc"));
-	      System.setProperty( "java.security.auth.login.config", "C:\\Users\\Administrator\\workspace\\KerberosSeurity\\src\\resources\\jaas.conf");
+	      System.setProperty( "java.security.auth.login.config", "C:\\Users\\Administrator\\workspace\\KerberosSeurity\\jaas.conf");
 	      System.setProperty( "javax.security.auth.useSubjectCredsOnly", "true");
 	      String username = props.getProperty( "client.principal.name");
 	      String password = props.getProperty( "client.password");
@@ -38,8 +38,8 @@ public class KerberosClient {
 	      // Request the service ticket.
 	      client.initiateSecurityContext( servicePrincipalName);
 	      // Write the ticket to disk for the server to read.
-	      encodeAndWriteTicketToDisk( client.serviceTicket, "./security.token");
-	      System.out.println( "Service ticket encoded to disk successfully");
+//	      encodeAndWriteTicketToDisk( client.serviceTicket, "./security.token");
+//	      System.out.println( "Service ticket encoded to disk successfully");
 	      
 	      String tmp = encodeAndWriteTicketToDisk( client.serviceTicket, "./security.token");
 	      System.out.println("ticket = " + tmp);
@@ -76,30 +76,30 @@ public class KerberosClient {
 		  try {
 		      // Setup up the Kerberos properties.
 		      Properties props = new Properties();
-		      String path = "${path}";
+//		      String path = "${path}";
 //		      props.load( new FileInputStream( "client.properties"));
-		      props.load( new FileInputStream( "C:\\Users\\Administrator\\workspace\\KerberosSeurity\\src\\resources\\client.properties"));
+		      props.load( new FileInputStream( "C:\\Users\\Administrator\\workspace\\KerberosSeurity\\client.properties"));
 		      
 		      System.setProperty( "sun.security.krb5.debug", "true");
 		      System.setProperty( "java.security.krb5.realm", props.getProperty( "realm")); 
 		      System.setProperty( "java.security.krb5.kdc", props.getProperty( "kdc"));
-		      System.setProperty( "java.security.auth.login.config", "C:\\Users\\Administrator\\workspace\\KerberosSeurity\\src\\resources\\jaas.conf");
+		      System.setProperty( "java.security.auth.login.config", "C:\\Users\\Administrator\\workspace\\KerberosSeurity\\jaas.conf");
 		      System.setProperty( "javax.security.auth.useSubjectCredsOnly", "true");
 		      String username = props.getProperty( "client.principal.name");
 		      String password = props.getProperty( "client.password");
 		      String servicePrincipalName =	props.getProperty("service.principal.name");
 		      // Oid mechanism = use Kerberos V5 as the security mechanism.
 		      krb5Oid = new Oid( "1.2.840.113554.1.2.2");
-		      KerberosClient client = new KerberosClient();
+//		      KerberosClient client = new KerberosClient();
 		      // Login to the KDC.
-		      client.login( username, password);
+		      this.login( username, password);
 		      // Request the service ticket.
-		      client.initiateSecurityContext( servicePrincipalName);
+		      this.initiateSecurityContext( servicePrincipalName);
 		      // Write the ticket to disk for the server to read.
-		      encodeAndWriteTicketToDisk( client.serviceTicket, "./security.token");
-		      System.out.println( "Service ticket encoded to disk successfully");
+//		      encodeAndWriteTicketToDisk( this.serviceTicket, "./security.token");
+//		      System.out.println( "Service ticket encoded to disk successfully");
 		      
-		      String encodedClientKerberosTicket = encodeAndWriteTicketToDisk( client.serviceTicket, "./security.token");
+		      String encodedClientKerberosTicket = encodeAndWriteTicketToDisk( this.serviceTicket, "./security.token");
 		      System.out.println("ticket = " + encodedClientKerberosTicket);
 //		      Socket s = new Socket("localhost",7777);
 //		      PrintWriter out = new PrintWriter(s.getOutputStream());   
