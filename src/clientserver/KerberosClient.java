@@ -22,7 +22,7 @@ public class KerberosClient {
 	      String path = "${Path}";
 	      Properties props = new Properties();
 	      props.load( new FileInputStream( "C:\\Users\\Administrator\\workspace\\KerberosSeurity\\client.properties"));
-	      System.setProperty( "sun.security.krb5.debug", "true");
+	      System.setProperty( "sun.security.krb5.debug", "false");
 	      System.setProperty( "java.security.krb5.realm", props.getProperty( "realm")); 
 	      System.setProperty( "java.security.krb5.kdc", props.getProperty( "kdc"));
 	      System.setProperty( "java.security.auth.login.config", "C:\\Users\\Administrator\\workspace\\KerberosSeurity\\jaas.conf");
@@ -80,7 +80,7 @@ public class KerberosClient {
 //		      props.load( new FileInputStream( "client.properties"));
 		      props.load( new FileInputStream( "C:\\Users\\Administrator\\workspace\\KerberosSeurity\\client.properties"));
 		      
-		      System.setProperty( "sun.security.krb5.debug", "true");
+		      System.setProperty( "sun.security.krb5.debug", "false");
 		      System.setProperty( "java.security.krb5.realm", props.getProperty( "realm")); 
 		      System.setProperty( "java.security.krb5.kdc", props.getProperty( "kdc"));
 		      System.setProperty( "java.security.auth.login.config", "C:\\Users\\Administrator\\workspace\\KerberosSeurity\\jaas.conf");
@@ -100,7 +100,7 @@ public class KerberosClient {
 //		      System.out.println( "Service ticket encoded to disk successfully");
 		      
 		      String encodedClientKerberosTicket = encodeAndWriteTicketToDisk( this.serviceTicket, "./security.token");
-		      System.out.println("ticket = " + encodedClientKerberosTicket);
+//		      System.out.println("ticket = " + encodedClientKerberosTicket);
 //		      Socket s = new Socket("localhost",7777);
 //		      PrintWriter out = new PrintWriter(s.getOutputStream());   
 //		      out.println(encodedClientKerberosTicket);

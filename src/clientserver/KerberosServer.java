@@ -40,7 +40,7 @@ public class KerberosServer {
         String str = null;
         while ((str = is.readLine()) != null) {
           buffer.append( str + "\n");
-          System.out.println("ticket = " + str);
+//          System.out.println("ticket = " + str);
         }
         is.close();
 
@@ -91,10 +91,10 @@ public class KerberosServer {
     });
   }
   
-  public void validateTicket(String ticket) {
+  public boolean validateTicket(String ticket) {
 	  try { Properties props = new Properties();
       props.load( new FileInputStream( "C:\\Users\\Administrator\\workspace\\KerberosSeurity\\server.properties"));
-      System.setProperty( "sun.security.krb5.debug", "true");
+      System.setProperty( "sun.security.krb5.debug", "false");
       System.setProperty( "java.security.krb5.realm", props.getProperty( "realm"));
       System.setProperty( "java.security.krb5.kdc", props.getProperty( "kdc"));
       System.setProperty( "java.security.auth.login.config", "C:\\Users\\Administrator\\workspace\\KerberosSeurity\\jaas.conf");
@@ -125,11 +125,13 @@ public class KerberosServer {
 		String clientName = server.acceptSecurityContext(decoder.decodeBuffer(ticket.toString()));
         System.out.println( "\nSecurity context successfully initialised!");
         System.out.println( "\nHello World " + clientName + "!");
+        return true;
 //      }
 	     
 	    }
 	    catch (Exception e) {
 	      e.printStackTrace();
+	      return false;
 	    }
 	  }
 }
