@@ -15,6 +15,8 @@ public class KerberosClient {
 	 
 	  private Subject subject;
 	  private byte[] serviceTicket;
+	  private  String username;
+	  private String password;
 	 
 	  public static void main( String[] args) {
 	    try {
@@ -30,6 +32,7 @@ public class KerberosClient {
 	      String username = props.getProperty( "client.principal.name");
 	      String password = props.getProperty( "client.password");
 	      String servicePrincipalName =	props.getProperty("service.principal.name");
+	      
 	      // Oid mechanism = use Kerberos V5 as the security mechanism.
 	      krb5Oid = new Oid( "1.2.840.113554.1.2.2");
 	      KerberosClient client = new KerberosClient();
@@ -72,7 +75,7 @@ public class KerberosClient {
 	  public KerberosClient() {
 	    super();
 	  }
-	  public String getKerberosTicket() {
+	  public String getKerberosTicket(String userId, String password) {
 		  try {
 		      // Setup up the Kerberos properties.
 		      Properties props = new Properties();
@@ -84,9 +87,11 @@ public class KerberosClient {
 		      System.setProperty( "java.security.krb5.realm", props.getProperty( "realm")); 
 		      System.setProperty( "java.security.krb5.kdc", props.getProperty( "kdc"));
 		      System.setProperty( "java.security.auth.login.config", "C:\\Users\\Administrator\\workspace\\KerberosSeurity\\jaas.conf");
+		      this.username = userId;
+		      this.password = password;
 		      System.setProperty( "javax.security.auth.useSubjectCredsOnly", "true");
-		      String username = props.getProperty( "client.principal.name");
-		      String password = props.getProperty( "client.password");
+//		      String username = props.getProperty( "client.principal.name");
+//		      String password = props.getProperty( "client.password");
 		      String servicePrincipalName =	props.getProperty("service.principal.name");
 		      // Oid mechanism = use Kerberos V5 as the security mechanism.
 		      krb5Oid = new Oid( "1.2.840.113554.1.2.2");
