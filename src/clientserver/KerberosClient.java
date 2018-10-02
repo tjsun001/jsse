@@ -79,8 +79,6 @@ public class KerberosClient {
 		  try {
 		      // Setup up the Kerberos properties.
 		      Properties props = new Properties();
-//		      String path = "${path}";
-//		      props.load( new FileInputStream( "client.properties"));
 		      props.load( new FileInputStream( "C:\\Users\\Administrator\\workspace\\KerberosSeurity\\client.properties"));
 		      
 		      System.setProperty( "sun.security.krb5.debug", "false");
@@ -90,30 +88,17 @@ public class KerberosClient {
 		      this.username = userId;
 		      this.password = password;
 		      System.setProperty( "javax.security.auth.useSubjectCredsOnly", "true");
-//		      String username = props.getProperty( "client.principal.name");
-//		      String password = props.getProperty( "client.password");
+		      		      
 		      String servicePrincipalName =	props.getProperty("service.principal.name");
 		      // Oid mechanism = use Kerberos V5 as the security mechanism.
 		      krb5Oid = new Oid( "1.2.840.113554.1.2.2");
-//		      KerberosClient client = new KerberosClient();
 		      // Login to the KDC.
 		      this.login( username, password);
 		      // Request the service ticket.
 		      this.initiateSecurityContext( servicePrincipalName);
-		      // Write the ticket to disk for the server to read.
-//		      encodeAndWriteTicketToDisk( this.serviceTicket, "./security.token");
-//		      System.out.println( "Service ticket encoded to disk successfully");
 		      
 		      String encodedClientKerberosTicket = encodeAndWriteTicketToDisk( this.serviceTicket, "./security.token");
-//		      System.out.println("ticket = " + encodedClientKerberosTicket);
-//		      Socket s = new Socket("localhost",7777);
-//		      PrintWriter out = new PrintWriter(s.getOutputStream());   
-//		      out.println(encodedClientKerberosTicket);
-//		      out.flush();
-//		      out.close();
-//		      System.exit(0);
-		      return encodedClientKerberosTicket;
-		      
+		      return encodedClientKerberosTicket;		      
 		      
 		    }
 		    catch ( LoginException e) {
@@ -175,10 +160,10 @@ public class KerberosClient {
 	  private static String encodeAndWriteTicketToDisk( byte[] ticket, String filepath)
 	      throws IOException {
 	    BASE64Encoder encoder = new BASE64Encoder();    
-	    FileWriter writer = new FileWriter( new File( filepath));
+//	    FileWriter writer = new FileWriter( new File( filepath));
 	    String encodedToken = encoder.encode( ticket);
-	    writer.write( encodedToken);
-	    writer.close();
+//	    writer.write( encodedToken);
+//	    writer.close();
 		return encodedToken;
 	  }
 	}

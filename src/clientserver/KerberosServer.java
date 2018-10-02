@@ -105,28 +105,15 @@ public class KerberosServer {
       KerberosServer server = new KerberosServer();
       // Login to the KDC.
       server.login( password);
-//      ServerSocket s = new ServerSocket(7777);
-//      while (true) {
-//        Socket s2 = s.accept();
-//        BufferedReader is = new BufferedReader(new InputStreamReader(s2.getInputStream()));
-//        StringBuffer buffer = new StringBuffer();
-//        String str = null;
-//        while ((str = is.readLine()) != null) {
-//          buffer.append( str + "\n");
-//          System.out.println("ticket = " + str);
-//        }
-//        is.close();
 
         @SuppressWarnings("restriction")
 		BASE64Decoder decoder = new BASE64Decoder();
         
         @SuppressWarnings("restriction")
-//		String clientName = server.acceptSecurityContext(decoder.decodeBuffer( buffer.toString()));
 		String clientName = server.acceptSecurityContext(decoder.decodeBuffer(ticket.toString()));
         System.out.println( "\nSecurity context successfully initialised!");
         System.out.println( "\nHello World " + clientName + "!");
         return true;
-//      }
 	     
 	    }
 	    catch (Exception e) {
